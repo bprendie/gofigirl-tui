@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"strings"
@@ -73,16 +75,28 @@ func (m model) Init() tea.Cmd {
 
 func playStream(ctx context.Context, url string, videoStyle string) tea.Cmd {
 	return func() tea.Msg {
+		logFile, err := os.OpenFile("gofigirl_errors.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			return errMsg{fmt.Errorf("error opening log file: %w", err)}
+		}
+		defer logFile.Close()
+
 		var vo string
 		if videoStyle == "Lofi Video" {
 			vo = "tct"
 		}
 
+		var ytDlpErr bytes.Buffer
 		c := exec.CommandContext(ctx, "yt-dlp", "-f", "b", "-g", url)
+		c.Stderr = io.MultiWriter(logFile, &ytDlpErr)
 		output, err := c.Output()
 		if err != nil {
-			return errMsg{fmt.Errorf("error getting stream URL: %w", err)}
+			if strings.Contains(ytDlpErr.String(), "Forbidden") {
+				return nil
+			}
+			return errMsg{fmt.Errorf("error getting stream URL: %w\n%s", err, ytDlpErr.String())}
 		}
+
 		streamURL := strings.TrimSpace(string(output))
 		var cmd *exec.Cmd
 		if vo != "" {
@@ -92,7 +106,7 @@ func playStream(ctx context.Context, url string, videoStyle string) tea.Cmd {
 		}
 		cmd.Stdin = os.Stdin
 		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
+		cmd.Stderr = logFile
 		if err := cmd.Run(); err != nil {
 			return errMsg{fmt.Errorf("error running mpv: %w", err)}
 		}
@@ -198,6 +212,15 @@ func (m model) View() string {
 }
 
 func main() {
+	if len(os.Args) > 1 {
+		url := os.Args[1]
+		if err := playStream(context.Background(), url, "Lofi Video")(); err != nil {
+			fmt.Printf("Error playing stream: %v\n", err)
+			os.Exit(1)
+		}
+		os.Exit(0)
+	}
+
 	m := initialModel()
 	p := tea.NewProgram(m)
 

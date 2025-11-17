@@ -30,16 +30,33 @@ git commit -m "Initial commit: Create GoFigirl TUI application"
 
 This creates the first snapshot of your project in the repository's history.
 
-## Step 3: Create a New Public Repository on GitHub
+## Step 3: Create a New Public Repository on GitHub using `gh` CLI
 
-Now, you need to create a new repository on GitHub.
+You can create a new repository directly from your terminal using the GitHub CLI (`gh`). If you don't have `gh` installed, you can find installation instructions on the [GitHub CLI documentation](https://cli.github.com/).
 
-1.  Go to [GitHub](https://github.com) and log in to your account.
-2.  In the upper-right corner of any page, click the `+` icon, and then click **New repository**.
-3.  Name your repository (e.g., `gofigirl-tui`).
-4.  Ensure that **Public** is selected.
-5.  **Do not** initialize the repository with a `README`, `.gitignore`, or `license`. You've already created these files locally.
-6.  Click **Create repository**.
+```bash
+# Make sure you are logged in to GitHub with the gh CLI
+gh auth login
+
+# Create a new public repository
+# Replace 'gofigirl-tui' with your desired repository name
+# The '--public' flag makes the repository public
+# The '--source .' flag uploads the current directory to the repository
+# The '--remote upstream' flag sets the remote name to 'upstream' instead of 'origin'
+# The '--push' flag pushes the local branch to the remote repository
+gh repo create gofigirl-tui --public --source=. --remote=upstream --push
+```
+
+**Explanation of flags:**
+
+*   `gofigirl-tui`: This is the name your new repository will have on GitHub. Change it if you want a different name.
+*   `--public`: This makes your repository public. If you wanted a private repository, you would use `--private`.
+*   `--source=.`: This tells `gh` to create the repository from the current directory. It will automatically add and commit your local files.
+*   `--remote=upstream`: This sets the name of the remote to `upstream`. You can choose any name you like, but `origin` is a common convention for your main remote. Since we are using `gh` to push everything in one go, we will rename the default `origin` to `upstream` to avoid any conflicts with the default remote name `origin` that `gh` might create internally.
+*   `--push`: This flag pushes your local `main` branch to the newly created GitHub repository. You don't need to manually run `git push` afterwards.
+
+After running this command, your local repository will be created, pushed to GitHub, and linked to the remote. You can then skip Step 4 (pushing to GitHub).
+
 
 ## Step 4: Push Your Local Repository to GitHub
 

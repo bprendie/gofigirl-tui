@@ -47,9 +47,14 @@ sudo apt install yt-dlp mpv
     go build -o gofigirl
     ```
 3.  Run the application:
-    ```bash
-    ./gofigirl
-    ```
+    -   To launch the TUI:
+        ```bash
+        ./gofigirl
+        ```
+    -   To play a YouTube URL directly (defaulting to "Lofi Video" style):
+        ```bash
+        ./gofigirl https://youtu.be/cfuGO3sHXXo
+        ```
 
 ## Controls
 
