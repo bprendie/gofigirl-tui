@@ -4,6 +4,9 @@ A terminal user interface for playing YouTube streams, inspired by the Lofi Girl
 
 This application is written in Go and uses `yt-dlp` and `mpv` to play YouTube streams in the terminal.
 
+
+![Screenshot of GoFigirl playing a video](gofi_2.png)
+![Screenshot of GoFigirl TUI interface](gofi_3.png)
 ## Features
 
 -   Play predefined streams from a `presets.json` file.
@@ -57,12 +60,12 @@ sudo apt install yt-dlp mpv
         ```
 
 ## Controls
-
 -   **Up/Down Arrows**: Navigate the preset list.
 -   **Left/Right Arrows**: Change the video style.
 -   **Enter**: Play the selected preset or the custom URL.
 -   **q / ctrl+c**: Quit the application.
 
+![Screenshot of GoFigirl in Lofi Video mode](gofi_1.png)
 ## `presets.json`
 
 The `presets.json` file contains a list of presets that are displayed in the TUI. You can customize this file to add, remove, or modify the presets.
