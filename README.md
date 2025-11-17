@@ -38,26 +38,29 @@ sudo apt update
 sudo apt install yt-dlp mpv
 ```
 
-## Installation and Usage
+## Installation
 
 1.  Clone the repository:
     ```bash
     git clone <repository-url>
     cd gofigirl-tui
     ```
-2.  Build the application:
+2.  Run the installation script:
     ```bash
-    go build -o gofigirl
+    ./install.sh
     ```
-3.  Run the application:
-    -   To launch the TUI:
-        ```bash
-        ./gofigirl
-        ```
-    -   To play a YouTube URL directly (defaulting to "Lofi Video" style):
-        ```bash
-        ./gofigirl https://youtu.be/cfuGO3sHXXo
-        ```
+    The script will prompt you to choose an installation directory. It will then build the binary and copy it along with `presets.json` to your chosen location.
+
+## Usage
+
+-   To launch the TUI:
+    ```bash
+    gofigirl
+    ```
+-   To play a YouTube URL directly (defaulting to "Lofi Video" style):
+    ```bash
+    gofigirl https://youtu.be/cfuGO3sHXXo
+    ```
 
 ## Controls
 -   **Up/Down Arrows**: Navigate the preset list.

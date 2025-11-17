@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/charmbracelet/bubbles/textinput"
@@ -38,8 +39,16 @@ type errMsg struct{ err error }
 func (e errMsg) Error() string { return e.err.Error() }
 
 func initialModel() model {
+	exePath, err := os.Executable()
+	if err != nil {
+		fmt.Printf("Error getting executable path: %v\n", err)
+		os.Exit(1)
+	}
+	exeDir := filepath.Dir(exePath)
+	presetsPath := filepath.Join(exeDir, "presets.json")
+
 	// Read presets from file
-	file, err := os.ReadFile("presets.json")
+	file, err := os.ReadFile(presetsPath)
 	if err != nil {
 		fmt.Println("Error reading presets.json:", err)
 		os.Exit(1)
